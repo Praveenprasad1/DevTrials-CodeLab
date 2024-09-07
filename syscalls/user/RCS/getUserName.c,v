@@ -1,0 +1,39 @@
+head	1.1;
+access;
+symbols;
+locks
+	praveen:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	2023.03.24.13.29.16;	author praveen;	state Exp;
+branches;
+next	;
+
+
+desc
+@Syscall to get user name
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@/*
+ * RCS Logs:
+ * $Log$
+ */
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h> 
+
+int main() {
+char *buf;
+//buf=(char *)malloc(10*sizeof(char));
+buf=getlogin();
+return printf("User: %s \n",buf);
+}
+@

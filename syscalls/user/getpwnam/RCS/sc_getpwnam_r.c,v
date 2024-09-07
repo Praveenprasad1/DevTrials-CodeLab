@@ -1,0 +1,126 @@
+head	1.2;
+access;
+symbols;
+locks
+	praveen:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2023.08.07.18.59.30;	author praveen;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2023.08.07.18.27.43;	author praveen;	state Exp;
+branches;
+next	;
+
+
+desc
+@This is about syscall getpwnam_r() which is re-entrant version (needs through testing, verification and confirmations) and getpwnam(),
+and their usage. Version 1.0 of this file is on getpwnam_r().
+@
+
+
+1.2
+log
+@This version v1.2 contains changes for syscall getpwnam() and shows the usage
+@
+text
+@/* 
+ * Praveen Prasad (dt07Aug2023At23:42hrs(approx),Mydesk,home,bangalore)
+ * About syscall getpwnam() and getpwnam_r() and usage in code.
+ * RCS Logs:
+ * $Log: sc_getpwnam_r.c,v $
+ * Revision 1.1  2023/08/07 18:27:43  praveen
+ * Initial revision
+ *
+ */
+/*
+ * Infos:
+ *        The passwd structure is defined in <pwd.h> as follows:
+
+           struct passwd {
+               char   *pw_name;       // username 
+               char   *pw_passwd;     // user password
+               uid_t   pw_uid;        // user ID 
+               gid_t   pw_gid;        // group ID 
+               char   *pw_gecos;      // user information 
+               char   *pw_dir;        // home directory 
+               char   *pw_shell;      // shell program 
+           };
+*/
+
+#include <pwd.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+
+       int
+       main(int argc, char *argv[])
+       {
+           struct passwd *pwd;
+           struct passwd *result;
+           char *buf;
+           size_t bufsize;
+           int s;
+
+           if (argc != 2) {
+               fprintf(stderr, "Usage: %s username\n", argv[0]);
+               exit(EXIT_FAILURE);
+           }
+
+           bufsize = sysconf(_SC_GETPW_R_SIZE_MAX);
+           if (bufsize == -1)          /* Value was indeterminate */
+               bufsize = 16384;        /* Should be more than enough */
+
+           buf = malloc(bufsize);
+           if (buf == NULL) {
+               perror("malloc");
+               exit(EXIT_FAILURE);
+           }
+
+           result = getpwnam(argv[1]);
+           if (result == NULL) {
+               fprintf(stderr, "getpwnam: Error\n");
+               exit(EXIT_FAILURE);
+           }
+           pwd = result;
+           printf("Name: %s; UID: %jd\n", pwd->pw_gecos,
+                   (intmax_t) pwd->pw_uid);
+           exit(EXIT_SUCCESS);
+       }
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d5 4
+a8 1
+ * $Log$
+d35 1
+a35 1
+           struct passwd pwd;
+d56 1
+a56 1
+           s = getpwnam_r(argv[1], &pwd, buf, bufsize, &result);
+d58 1
+a58 6
+               if (s == 0)
+                   printf("Not found\n");
+               else {
+                   errno = s;
+                   perror("getpwnam_r");
+               }
+d61 3
+a63 3
+
+           printf("Name: %s; UID: %jd\n", pwd.pw_gecos,
+                   (intmax_t) pwd.pw_uid);
+@

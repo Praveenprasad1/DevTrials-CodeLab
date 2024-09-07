@@ -1,0 +1,44 @@
+head	1.1;
+access;
+symbols;
+locks
+	praveen:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	2023.03.24.13.29.50;	author praveen;	state Exp;
+branches;
+next	;
+
+
+desc
+@Syscalls usages to get information about system loggedin user name and the host computer name
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@/*
+ * RCS Logs:
+ * $Log$
+ */
+#include <stdio.h>
+#include <unistd.h>
+
+#define HOST_NAME_LEN   20
+
+int main() {
+   char *buildUser, hostName[HOST_NAME_LEN];
+   int retVal = gethostname(hostName, HOST_NAME_LEN - 1);
+   buildUser = getlogin();
+   if (buildUser != NULL)
+     printf("User: %s\n", buildUser);
+   if (0 == retVal)
+     printf("Host: %s\n", hostName);
+   return retVal;
+}
+@

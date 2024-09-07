@@ -1,0 +1,9 @@
+# Ignore the a.out binary file
+a.out
+
+# Ignore other typical binary files
+*.o        # Object files
+*.so       # Shared libraries
+*.exe      # Executables
+*.dll      # Dynamic-link libraries (Windows)
+*.bin      # Generic binary files

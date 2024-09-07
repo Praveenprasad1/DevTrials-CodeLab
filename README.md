@@ -1,5 +1,5 @@
 # DevTrials-CodeLab
-Openning up my trial codes under 2-clause BSD License for public usage. Thanks.
+Openning up various trial code as part of Dev trials under 2-clause BSD License for public usage. Thanks.
 The license wording goes as below for reference:
 "Copyright (c) 2024, Praveen Kumar Prasad (User ID: praveenprasad1 At github.com)
 All rights reserved.
